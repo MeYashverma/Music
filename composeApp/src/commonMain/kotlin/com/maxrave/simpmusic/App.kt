@@ -8,6 +8,7 @@ import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
@@ -252,8 +254,9 @@ fun App(viewModel: SharedViewModel = koinInject()) {
 
     val backdrop = rememberBackdrop()
 
-    AppTheme {
+    AppTheme(enableLiquidGlass = isLiquidGlassEnabled == TRUE) {
         Scaffold(
+            containerColor = if (isLiquidGlassEnabled == TRUE) Color.Transparent else Color.Black,
             bottomBar = {
                 if (!isTablet) {
                     AnimatedVisibility(
@@ -313,6 +316,23 @@ fun App(viewModel: SharedViewModel = koinInject()) {
                     Modifier
                         .fillMaxSize()
                         .then(
+                            if (isLiquidGlassEnabled == TRUE) {
+                                Modifier.background(
+                                    brush =
+                                        Brush.linearGradient(
+                                            colors =
+                                                listOf(
+                                                    Color(0xFF111827),
+                                                    Color(0xFF1E3A5F),
+                                                    Color(0xFF312E81),
+                                                ),
+                                        ),
+                                )
+                            } else {
+                                Modifier
+                            },
+                        )
+                        .then(
                             if (isLiquidGlassEnabled == TRUE && !isTablet) {
                                 Modifier.layerBackdrop(backdrop)
                             } else {
@@ -333,6 +353,17 @@ fun App(viewModel: SharedViewModel = koinInject()) {
                         Box(
                             Modifier
                                 .fillMaxSize()
+                                .then(
+                                    if (isLiquidGlassEnabled == TRUE) {
+                                        Modifier
+                                            .padding(if (isTablet && !isInFullscreen) 10.dp else 0.dp)
+                                            .clip(RoundedCornerShape(28.dp))
+                                            .background(Color(0x1EFFFFFF))
+                                            .border(1.dp, Color(0x33D8E7FF), RoundedCornerShape(28.dp))
+                                    } else {
+                                        Modifier
+                                    },
+                                )
                                 .weight(1f),
                         ) {
                             Box(
