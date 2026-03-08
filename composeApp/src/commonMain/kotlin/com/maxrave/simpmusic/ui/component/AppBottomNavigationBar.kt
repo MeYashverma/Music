@@ -156,13 +156,14 @@ fun AppNavigationRail(
         )
     }
     NavigationRail {
+        val railContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
         Spacer(Modifier.height(16.dp))
         Box(Modifier.padding(horizontal = 16.dp)) {
             Box(
                 Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(Color.DarkGray),
+                    .background(railContainerColor),
                 contentAlignment = Alignment.Center,
             ) {
                 Image(
@@ -191,6 +192,10 @@ fun AppNavigationRail(
                     )
                 },
                 selected = selectedIndex == index,
+                colors =
+                    NavigationRailItemDefaults.colors(
+                        indicatorColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                    ),
                 onClick = {
                     if (selectedIndex == screen.ordinal) {
                         if (currentBackStackEntry?.destination?.hierarchy?.any {
